@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "task": "ceo",
+  "plannedDate": "2026-11-25",
+  "startedAt": "2026-11-25T05:00:11.000Z",
+  "finishedAt": "2026-11-25T05:16:41.000Z",
+  "attempt": 1,
+  "execution": "succeeded",
+  "research": "complete",
+  "archive": "verified",
+  "stage": "archive",
+  "completedUnits": 1,
+  "reusedSources": 0,
+  "issues": [],
+  "nextAction": "advance_topic"
+}
