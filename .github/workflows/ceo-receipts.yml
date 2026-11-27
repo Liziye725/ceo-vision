@@ -1,0 +1,41 @@
+name: CEO receipt summary
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'automation/runs/**'
+      - 'src/run-receipt.mjs'
+      - 'scripts/run-receipts.mjs'
+      - 'tests/run-receipt.test.mjs'
+      - '.github/workflows/ceo-receipts.yml'
+  pull_request:
+    paths:
+      - 'automation/runs/**'
+      - 'src/run-receipt.mjs'
+      - 'scripts/run-receipts.mjs'
+      - 'tests/run-receipt.test.mjs'
+      - '.github/workflows/ceo-receipts.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ceo-receipts-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  validate-and-summarize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node --test tests/run-receipt.test.mjs
+      - run: node scripts/run-receipts.mjs summary automation/runs .data/schedule-summary.md
+      - name: Publish CEO summary
+        run: cat .data/schedule-summary.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ceo-run-summary
+          path: .data/schedule-summary.md
+          retention-days: 30
