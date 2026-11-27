@@ -1,0 +1,37 @@
+name: CEO source checks
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+      - 'worker/**'
+      - 'scripts/build.mjs'
+      - 'RESEARCH_WORKFLOW.md'
+      - 'package.json'
+      - 'tests/worker.test.mjs'
+      - '.openai/hosting.example.json'
+      - '.github/workflows/ceo-code.yml'
+  pull_request:
+    paths:
+      - 'app/**'
+      - 'worker/**'
+      - 'scripts/build.mjs'
+      - 'RESEARCH_WORKFLOW.md'
+      - 'package.json'
+      - 'tests/worker.test.mjs'
+      - '.openai/hosting.example.json'
+      - '.github/workflows/ceo-code.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm run build
+      - run: node --test tests/worker.test.mjs
