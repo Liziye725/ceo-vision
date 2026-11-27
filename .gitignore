@@ -2,3 +2,6 @@ dist/
 outputs/
 .sites-runtime/
 .env*
+.data/
+.openai/hosting.json
+research/
