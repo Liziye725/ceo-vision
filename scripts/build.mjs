@@ -6,7 +6,7 @@ const page=await readFile('app/index.html','utf8');
 const workflow=await readFile('RESEARCH_WORKFLOW.md','utf8');
 worker=worker.replace('/*__PAGE__*/',JSON.stringify(page)).replace('/*__WORKFLOW__*/',JSON.stringify(workflow));
 await writeFile('dist/server/index.js',worker);
-await writeFile('dist/.openai/hosting.json',await readFile('.openai/hosting.json'));
+await writeFile('dist/.openai/hosting.json',await readFile('.openai/hosting.json').catch(()=>readFile('.openai/hosting.example.json')));
 const artifact=await import('../dist/server/index.js?build='+Date.now());
 if(typeof artifact.default.fetch!=='function')throw new Error('Missing fetch');
 console.log('Built and verified Worker artifact');
